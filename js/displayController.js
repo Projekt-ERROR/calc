@@ -4,6 +4,7 @@
 
 const MOTD = 'please use buttons';
 const TYPING_SPEED = 50;
+const OPERATORS = ['+', '-', '*', '/'];
 
 const displayController = {
   display: document.getElementById('display'),
@@ -52,26 +53,51 @@ const displayController = {
    * append input to display
    * @param {string} input
    */
-  appendToDisplay: function (input) {
-    
-    // checks for MOTD
-    if (this.isShowingMotd()) this.clearDisplay();
-
-    // special handling for decimal
-    if (input === '.') {
+    appendToDisplay: function (input) {
       const currentNumber = this.getCurrentNumber();
+      const display = this.getValue();
       
-      // if num already has . return
-      if (currentNumber.includes('.')) {
-        return;
+      // Check for MOTD
+      if (this.isShowingMotd()) this.clearDisplay();
 
-      // if num is empty add 0 to the front
-      } else if (currentNumber === '') {
-        input = '0.'
+      // Special handling for decimal
+      if (input === '.') { 
+        if (currentNumber.includes('.')) {
+          return;
+        }
+        if (currentNumber === '') {
+          input = '0.';
+        }
       }
-    }
-    this.setValue(this.getValue() + input);
-  },
+
+      // Special handling for operators
+      if (OPERATORS.includes(input)) {
+        
+        // Count consecutive operators at end
+        let consecutiveOps = 0;
+        for (let i = display.length - 1; i >= 0; i--) {
+          if (OPERATORS.includes(display[i])) {
+            consecutiveOps++;
+          } else {
+            break;
+          }
+        }
+        
+        // empty display: only allow minus
+        if (display === '' && input !== '-') return;
+
+        // starting with minus: don't allow another minus (prevent --)
+        if (display === '-') return;
+
+        // 1 operator already: only allow minus (for negatives like 5+-3)
+        if (consecutiveOps === 1 && input !== '-') return;
+
+        // 2+ operators already: block everything
+        if (consecutiveOps >= 2) return;
+      }
+      
+      this.setValue(this.getValue() + input);
+    },
 
   /**
    * reset display and show MOTD
@@ -151,7 +177,7 @@ const displayController = {
       this.appendToDisplay(key);
 
     // checks if operator
-    } else if (['+', '-', '*', '/'].includes(key)) {
+    } else if (OPERATORS.includes(key)) {
       event.preventDefault();
       this.appendToDisplay(key);
 
