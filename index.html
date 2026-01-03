@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculator v4</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+  <div class="header">
+    <h1>calcv4</h1>
+  </div>
+
+  <div class="calculator">
+    <input type="text" id="display" disabled>
+    <div class="buttons">
+      <button onclick="displayController.resetDisplay()">C</button>
+      <button onclick="displayController.deleteLast()">←</button>
+      <button onclick="displayController.appendToDisplay('/')" class="operator">/</button>
+      <button onclick="displayController.appendToDisplay('*')" class="operator">×</button>
+
+      <button onclick="displayController.appendToDisplay('7')">7</button>
+      <button onclick="displayController.appendToDisplay('8')">8</button>
+      <button onclick="displayController.appendToDisplay('9')">9</button>
+      <button onclick="displayController.appendToDisplay('-')" class="operator">-</button>
+
+      <button onclick="displayController.appendToDisplay('4')">4</button>
+      <button onclick="displayController.appendToDisplay('5')">5</button>
+      <button onclick="displayController.appendToDisplay('6')">6</button>
+      <button onclick="displayController.appendToDisplay('+')" class="operator">+</button>
+
+      <button onclick="displayController.appendToDisplay('1')">1</button>
+      <button onclick="displayController.appendToDisplay('2')">2</button>
+      <button onclick="displayController.appendToDisplay('3')">3</button>
+      <button onclick="displayController.appendToDisplay('.')">.</button>
+
+      <button onclick="displayController.appendToDisplay('0')">0</button>
+      <button onclick="App.calculate()" class="equals">=</button>
+    </div>
+  </div>
+
+  <!-- 1. utilities without depedences -->
+  <script src="js/utils.js"></script>
+
+  <!-- 2. core modules which depend on utils -->
+  <script src="js/calculatorEngine.js"></script>
+  <script src="js/displayController.js"></script>
+
+  <!-- 3. app cordinator -->
+  <script src="js/app.js"></script>
+</body>
+
+</html>
