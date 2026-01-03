@@ -10,7 +10,7 @@ const calculatorEngine = {
    * @returns {string} Expression in postfix notation
    */
   infixToPostfix: function (infix) {
-    const tokens = infix.match(/(\d+\.?\d*|[+\-*/()])/g) || [];
+    const tokens = infix.match(/(\d*\.?\d+|[+\-*/()])/g) || [];
     const output = [];
     const operators = [];
 
