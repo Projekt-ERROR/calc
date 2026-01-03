@@ -10,7 +10,13 @@ const calculatorEngine = {
    * @returns {string} Expression in postfix notation
    */
   infixToPostfix: function (infix) {
-    const tokens = infix.match(/(\d*\.?\d+|[+\-*/()])/g) || [];
+    // 1. tokenize
+    let tokens = infix.match(/(\d*\.?\d+|[+\-*/()])/g) || [];
+    
+    // 2. merge negative nums
+    tokens = this.mergeNegativeNumbers(tokens);
+
+    // 3. shunting yard
     const output = [];
     const operators = [];
 
@@ -78,6 +84,53 @@ const calculatorEngine = {
     }
 
     return stack[0];
+  },
+
+  /**
+   * checks if '-' at the start or after operator and then merges it with num
+   * @param {Array} tokens - array of tokens
+   * @returns {Array} processed tokens with merged '-'
+   */
+  mergeNegativeNumbers: function (tokens) {
+    const result = [];
+
+    for (let i = 0; i < tokens.length; i++) {
+      const current = tokens[i];
+      const previous = tokens[i - 1];
+      const next = tokens[i + 1];
+
+      if (current === '-') {
+        const isUnary = !previous || ['+', '-', '*', '/', '('].includes(previous);
+
+        if (isUnary && next && this.isNumber(next)) {
+
+          // merge the minus to num
+          result.push('-' + next);
+          i++;
+        } else {
+
+          // binary subtraction, keep it separate
+          result.push(current);
+        }
+      } else {
+
+        // not '-' push to results
+        result.push(current);
+      }
+    }
+    
+    return result;
+  },
+
+  /**
+   * check if a token is a number
+   * @param {string} token - the token to check
+   * @returns {boolean} True if token is number
+   */
+  isNumber: function (token) {
+    if (!isNaN(parseFloat(token)) && isFinite(token)) {
+      return true;
+    }
   },
 
   /**
