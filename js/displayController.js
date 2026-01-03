@@ -19,6 +19,16 @@ const displayController = {
   },
 
   /**
+   * gets the current number
+   * @returns {string} the current number string
+   */
+  getCurrentNumber: function () {
+    const display = this.getValue();
+    const parts = display.split(/[+\-*/]/);
+    return parts[parts.length - 1];
+  },
+
+  /**
    * set display value
    * @param {string} value
    */
@@ -43,7 +53,23 @@ const displayController = {
    * @param {string} input
    */
   appendToDisplay: function (input) {
+    
+    // checks for MOTD
     if (this.isShowingMotd()) this.clearDisplay();
+
+    // special handling for decimal
+    if (input === '.') {
+      const currentNumber = this.getCurrentNumber();
+      
+      // if num already has . return
+      if (currentNumber.includes('.')) {
+        return;
+
+      // if num is empty add 0 to the front
+      } else if (currentNumber === '') {
+        input = '0.'
+      }
+    }
     this.setValue(this.getValue() + input);
   },
 
