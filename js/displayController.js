@@ -6,7 +6,7 @@ const MOTD = 'please use buttons';
 const TYPING_SPEED = 50;
 
 const displayController = {
-  display: document.getElementById('display'), 
+  display: document.getElementById('display'),
   typingController: null,
   currentAnimationId: 0,
 
@@ -117,6 +117,37 @@ const displayController = {
    * @param {KeyboardEvent} event - the keyboard event
    */
   handleKeyPress: function (event) {
-    console.log('Key pressed:', event.key);
+    const key = event.key;
+
+    // checks if num
+    if (!isNaN(parseFloat(key)) && isFinite(key)) {
+      event.preventDefault();
+      this.appendToDisplay(key);
+
+    // checks if operator
+    } else if (['+', '-', '*', '/'].includes(key)) {
+      event.preventDefault();
+      this.appendToDisplay(key);
+
+    // checks if decimal
+    } else if (key === '.') {
+      event.preventDefault();
+      this.appendToDisplay(key);
+
+    // checks if '=' or 'Enter' to call App.calculate
+    } else if (key === '=' || key === 'Enter') {
+      event.preventDefault();
+      App.calculate();
+
+    // checks if 'Backspace' to delete last
+    } else if (key === 'Backspace') {
+      event.preventDefault();
+      this.deleteLast();
+
+    // checks if 'Escape' or 'c' to reset display
+    } else if (key === 'Escape' || key.toLowerCase() === 'c') {
+      event.preventDefault();
+      this.resetDisplay();
+    }
   }
 };
