@@ -6,7 +6,7 @@ const MOTD = 'please use buttons';
 const TYPING_SPEED = 50;
 
 const displayController = {
-  display: document.getElementById('display'),
+  display: document.getElementById('display'), 
   typingController: null,
   currentAnimationId: 0,
 
@@ -100,5 +100,23 @@ const displayController = {
       }
       throw err;
     }
+  },
+
+  /**
+   * initializes keyboard support
+   * initializes the keyboard event listener
+   */
+  initKeyboardSupport: function () {
+    document.addEventListener('keydown', (event) => {
+      this.handleKeyPress(event);
+    });
+  },
+
+  /**
+   * handles individual keypress event
+   * @param {KeyboardEvent} event - the keyboard event
+   */
+  handleKeyPress: function (event) {
+    console.log('Key pressed:', event.key);
   }
 };

@@ -16,3 +16,4 @@ const App = {
 
 // initialize application
 displayController.typingMessage(MOTD);
+displayController.initKeyboardSupport();
