@@ -2,11 +2,17 @@
  * display controller - manages all display and UI interactions
  */
 
-const MOTD = 'please use buttons';
-const TYPING_SPEED = 50;
 const OPERATORS = ['+', '-', '*', '/'];
 
-const displayController = {
+// ============================================
+// CALCULATOR DISPLAY
+// ============================================
+
+const displayCalculator = {
+  //const
+  MOTD: 'please use buttons',
+  TYPING_SPEED: 50,
+
   display: document.getElementById('display'),
   typingController: null,
   currentAnimationId: 0,
@@ -104,7 +110,7 @@ const displayController = {
    */
   resetDisplay: function () {
     this.setValue('');
-    this.typingMessage(MOTD);
+    this.typingMessage(this.MOTD);
   },
 
   /**
@@ -112,7 +118,7 @@ const displayController = {
    * @returns {boolean}
    */
   isShowingMotd: function () {
-    return this.typingController !== null || this.getValue() === MOTD;
+    return this.typingController !== null || this.getValue() === this.MOTD;
   },
 
   /**
@@ -144,7 +150,7 @@ const displayController = {
           break;
         }
         this.setValue(this.getValue() + char);
-        await sleep(TYPING_SPEED, signal);
+        await sleep(this.TYPING_SPEED, signal);
       }
     } catch (err) {
       if (err.name === 'AbortError') {
@@ -202,4 +208,65 @@ const displayController = {
       this.resetDisplay();
     }
   }
+};
+
+// ============================================
+// HISTORY DISPLAY
+// ============================================
+
+const displayHistory = {
+  historyList: document.getElementById('history-list'),
+
+  /**
+   * update the history display in UI
+   */
+  updateDisplay: function () {
+    const history = calculatorHistory.getHistory();
+    
+    // clear current display
+    this.historyList.innerHTML = '';
+    
+    // show message if empty
+    if (history.length === 0) {
+      this.showEmptyMessage();
+      return;
+    }
+    
+    // add each history item (newest first)
+    history.slice().reverse().forEach(entry => {
+      this.addHistoryItem(entry);
+    });
+  },
+
+  /**
+   * add a single history item to the display
+   * @param {Object} entry - History entry
+   * @param {string} entry.expression - The expression
+   * @param {number|string} entry.result - The result
+   */
+  addHistoryItem: function (entry) {
+    const item = document.createElement('div');
+    item.className = 'history-item';
+    item.innerHTML = `
+      <span class="history-expression">${entry.expression}</span>
+      <span class="history-result">= ${entry.result}</span>
+    `;
+    
+    // click to restore expression
+    item.onclick = () => {
+      displayCalculator.setValue(entry.expression);
+    };
+    
+    this.historyList.appendChild(item);
+  },
+
+  /**
+   * show empty history message
+   */
+  showEmptyMessage: function () {
+    const message = document.createElement('div');
+    message.className = 'history-empty';
+    message.textContent = 'No calculations yet';
+    this.historyList.appendChild(message);
+  },
 };
