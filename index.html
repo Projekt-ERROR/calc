@@ -13,30 +13,41 @@
     <h1>calcv4</h1>
   </div>
 
+  <!-- history panel -->
+  <div class="history-panel" id="history-panel">
+    <div class="history-header">
+      <span>History</span>
+      <button onclick="App.clearHistory()">Clear</button>
+    </div>
+    <div class="history-list" id="history-list">
+      <!-- history items will be added here -->
+    </div>
+  </div>
+  <!-- calculator buttons -->
   <div class="calculator">
     <input type="text" id="display" disabled>
     <div class="buttons">
-      <button onclick="displayController.resetDisplay()">C</button>
-      <button onclick="displayController.deleteLast()">←</button>
-      <button onclick="displayController.appendToDisplay('/')" class="operator">/</button>
-      <button onclick="displayController.appendToDisplay('*')" class="operator">×</button>
+      <button onclick="displayCalculator.resetDisplay()">C</button>
+      <button onclick="displayCalculator.deleteLast()">←</button>
+      <button onclick="displayCalculator.appendToDisplay('/')" class="operator">/</button>
+      <button onclick="displayCalculator.appendToDisplay('*')" class="operator">×</button>
 
-      <button onclick="displayController.appendToDisplay('7')">7</button>
-      <button onclick="displayController.appendToDisplay('8')">8</button>
-      <button onclick="displayController.appendToDisplay('9')">9</button>
-      <button onclick="displayController.appendToDisplay('-')" class="operator">-</button>
+      <button onclick="displayCalculator.appendToDisplay('7')">7</button>
+      <button onclick="displayCalculator.appendToDisplay('8')">8</button>
+      <button onclick="displayCalculator.appendToDisplay('9')">9</button>
+      <button onclick="displayCalculator.appendToDisplay('-')" class="operator">-</button>
 
-      <button onclick="displayController.appendToDisplay('4')">4</button>
-      <button onclick="displayController.appendToDisplay('5')">5</button>
-      <button onclick="displayController.appendToDisplay('6')">6</button>
-      <button onclick="displayController.appendToDisplay('+')" class="operator">+</button>
+      <button onclick="displayCalculator.appendToDisplay('4')">4</button>
+      <button onclick="displayCalculator.appendToDisplay('5')">5</button>
+      <button onclick="displayCalculator.appendToDisplay('6')">6</button>
+      <button onclick="displayCalculator.appendToDisplay('+')" class="operator">+</button>
 
-      <button onclick="displayController.appendToDisplay('1')">1</button>
-      <button onclick="displayController.appendToDisplay('2')">2</button>
-      <button onclick="displayController.appendToDisplay('3')">3</button>
-      <button onclick="displayController.appendToDisplay('.')">.</button>
+      <button onclick="displayCalculator.appendToDisplay('1')">1</button>
+      <button onclick="displayCalculator.appendToDisplay('2')">2</button>
+      <button onclick="displayCalculator.appendToDisplay('3')">3</button>
+      <button onclick="displayCalculator.appendToDisplay('.')">.</button>
 
-      <button onclick="displayController.appendToDisplay('0')">0</button>
+      <button onclick="displayCalculator.appendToDisplay('0')">0</button>
       <button onclick="App.calculate()" class="equals">=</button>
     </div>
   </div>
@@ -45,11 +56,14 @@
   <script src="js/utils.js"></script>
 
   <!-- 2. core modules which depend on utils -->
-  <script src="js/calculatorEngine.js"></script>
+
   <script src="js/displayController.js"></script>
+  <script src="js/calculatorEngine.js"></script>
+  <script src="js/calculatorHistory.js"></script>
 
   <!-- 3. app cordinator -->
   <script src="js/app.js"></script>
+  <script>App.initialize()</script>
 </body>
 
 </html>

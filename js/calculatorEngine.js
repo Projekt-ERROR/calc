@@ -1,5 +1,5 @@
 /**
- * calculator Engine - Pure mathematical computation
+ * calculator engine - pure mathematical computation
  * converts infix expressions to postfix and evaluates them
  */
 
