@@ -18,3 +18,8 @@ const sleep = (ms, abortSignal) => {
     });
   });
 };
+
+/**
+ * exports
+ */
+export { sleep };

@@ -2,7 +2,19 @@
  * display controller - manages all display and UI interactions
  */
 
+/**
+ * imports
+ */
+import { sleep } from './utils.js';
+import { calculatorHistory } from './calculatorHistory.js';
+
+
+/**
+ * constants
+ */
+
 const OPERATORS = ['+', '-', '*', '/'];
+
 
 // ============================================
 // CALCULATOR DISPLAY
@@ -195,7 +207,7 @@ const displayCalculator = {
     // checks if '=' or 'Enter' to call App.calculate
     } else if (key === '=' || key === 'Enter') {
       event.preventDefault();
-      App.calculate();
+      document.dispatchEvent(new CustomEvent('calculator:calculate'));
 
     // checks if 'Backspace' to delete last
     } else if (key === 'Backspace') {
@@ -270,3 +282,9 @@ const displayHistory = {
     this.historyList.appendChild(message);
   },
 };
+
+
+/**
+ * exports
+ */
+export { OPERATORS, displayCalculator, displayHistory };

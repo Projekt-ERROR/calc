@@ -2,6 +2,9 @@
  * calculator history functionality
  */
 
+/**
+ * constants
+ */
 const MAX_HISTORY = 10;
 
 const calculatorHistory = {
@@ -44,8 +47,6 @@ const calculatorHistory = {
     if (this.history.length > MAX_HISTORY) {
       this.history.shift();
     }
-
-    console.log('HISTORY UPDATED:', this.history)
   },
 
   /**
@@ -66,7 +67,6 @@ const calculatorHistory = {
    */
   clearHistory: function () {
     this.history = [];
-    console.log('history cleared')
   },
 
   /**
@@ -77,3 +77,9 @@ const calculatorHistory = {
     return this.history.length;
   }
 };
+
+
+/**
+ * exports
+ */
+export { MAX_HISTORY, calculatorHistory };

@@ -3,6 +3,7 @@
  * converts infix expressions to postfix and evaluates them
  */
 
+
 const calculatorEngine = {
   /**
    * convert infix notation to postfix (Reverse Polish Notation)
@@ -146,3 +147,9 @@ const calculatorEngine = {
     }
   }
 };
+
+
+/**
+ * exports
+ */
+export { calculatorEngine };
