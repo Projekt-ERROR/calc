@@ -20,7 +20,7 @@ const calculatorEngine = {
       if (typeof infix !== 'string') {
         return {
           success: false,
-          error: 'Expression must be a string'
+          error: 'expression must be a string'
         };
       }
 
@@ -68,7 +68,7 @@ const calculatorEngine = {
           if (!validate.isInSafeRange(num)) {
             return {
               success: false,
-              error: 'Number outside safe range'
+              error: 'number outside safe range'
             };
           }
           output.push(token);
@@ -97,7 +97,7 @@ const calculatorEngine = {
         } else {
           return {
             success: false,
-            error: `Invalid token: ${token}`
+            error: `invalid token: ${token}`
           };
         }
       }
@@ -127,7 +127,7 @@ const calculatorEngine = {
       };
 
     } catch (error) {
-      console.error('Error in infixToPostfix:', error);
+      console.error('error in infixToPostfix:', error);
       return {
         success: false,
         error: ERROR_MESSAGES.CALCULATION_ERROR
@@ -136,13 +136,13 @@ const calculatorEngine = {
   },
 
   /**
-   * Evaluate a postfix expression
-   * @param {string} postfix - Expression in postfix notation
+   * evaluate a postfix expression
+   * @param {string} postfix - expression in postfix notation
    * @returns {{success: boolean, result?: number, error?: string}}
    */
   evaluatePostfix: function (postfix) {
     try {
-      // Validate input
+      // validate input
       if (typeof postfix !== 'string' || postfix.trim() === '') {
         return {
           success: false,
@@ -160,7 +160,7 @@ const calculatorEngine = {
           if (!validate.isInSafeRange(num)) {
             return {
               success: false,
-              error: 'Number outside safe range'
+              error: 'number outside safe range'
             };
           }
           
@@ -201,7 +201,7 @@ const calculatorEngine = {
             default:
               return {
                 success: false,
-                error: `Invalid operator: ${token}`
+                error: `invalid operator: ${token}`
               };
           }
 
@@ -216,7 +216,7 @@ const calculatorEngine = {
           if (!validate.isInSafeRange(result)) {
             return {
               success: false,
-              error: 'Result outside safe range'
+              error: 'result outside safe range'
             };
           }
 
@@ -238,7 +238,7 @@ const calculatorEngine = {
       };
 
     } catch (error) {
-      console.error('Error in evaluatePostfix:', error);
+      console.error('error in evaluatePostfix:', error);
       return {
         success: false,
         error: ERROR_MESSAGES.CALCULATION_ERROR
@@ -247,8 +247,8 @@ const calculatorEngine = {
   },
 
   /**
-   * Checks if '-' at the start or after operator and merges it with number
-   * @param {Array} tokens - Array of tokens
+   * checks if '-' at the start or after operator and merges it with number
+   * @param {Array} tokens - array of tokens
    * @returns {{success: boolean, tokens?: Array, error?: string}}
    */
   mergeNegativeNumbers: function (tokens) {
@@ -256,7 +256,7 @@ const calculatorEngine = {
       if (!Array.isArray(tokens)) {
         return {
           success: false,
-          error: 'Tokens must be an array'
+          error: 'tokens must be an array'
         };
       }
 
@@ -271,10 +271,10 @@ const calculatorEngine = {
           const isUnary = !previous || ['+', '-', '*', '/', '('].includes(previous);
 
           if (isUnary && next && this.isNumber(next)) {
-            // Merge the minus to number
+            // merge the minus to number
             const negativeNum = '-' + next;
             
-            // Validate the merged number
+            // validate the merged number
             if (!validate.isValidNumber(negativeNum)) {
               return {
                 success: false,
@@ -283,13 +283,13 @@ const calculatorEngine = {
             }
             
             result.push(negativeNum);
-            i++; // Skip the next token as we've merged it
+            i++; // skip the next token as we've merged it
           } else {
-            // Binary subtraction, keep it separate
+            // binary subtraction, keep it separate
             result.push(current);
           }
         } else {
-          // Not '-', push to results
+          // not '-', push to results
           result.push(current);
         }
       }
@@ -300,7 +300,7 @@ const calculatorEngine = {
       };
 
     } catch (error) {
-      console.error('Error in mergeNegativeNumbers:', error);
+      console.error('error in mergeNegativeNumbers:', error);
       return {
         success: false,
         error: ERROR_MESSAGES.CALCULATION_ERROR
@@ -309,7 +309,7 @@ const calculatorEngine = {
   },
 
   /**
-   * Check if a token is a number
+   * check if a token is a number
    * @param {string} token - The token to check
    * @returns {boolean} True if token is number
    */
@@ -344,7 +344,7 @@ const calculatorEngine = {
       return evaluationResult;
 
     } catch (error) {
-      console.error('Error in calculate:', error);
+      console.error('error in calculate:', error);
       return {
         success: false,
         error: ERROR_MESSAGES.CALCULATION_ERROR

@@ -1,5 +1,5 @@
 /**
- * Application coordinator - ties together calculator engine and display
+ * application coordinator - ties together calculator engine and display
  */
 
 import { calculatorEngine } from './calculatorEngine.js';
@@ -10,32 +10,32 @@ import { tryCatch } from './utils.js';
 
 export const App = {
   /**
-   * Initialize the application
+   * initialize the application
    * @returns {{success: boolean, error?: string}}
    */
   initialize: function () {
     try {
       console.log('Initializing calculator application...');
 
-      // Initialize display calculator
+      // initialize display calculator
       const displayInitResult = displayCalculator.initialize();
       if (!displayInitResult.success) {
         throw new Error(`Display initialization failed: ${displayInitResult.error}`);
       }
 
-      // Initialize history display
+      // initialize history display
       const historyInitResult = displayHistory.initialize();
       if (!historyInitResult.success) {
         throw new Error(`History initialization failed: ${historyInitResult.error}`);
       }
 
-      // Show welcome message
+      // show welcome message
       displayCalculator.typingMessage(displayCalculator.MOTD);
       
-      // Update history display
+      // update history display
       displayHistory.updateDisplay();
 
-      // Set up event listeners
+      // set up event listeners
       this.setupEventListeners();
 
       console.log('Calculator application initialized successfully');
@@ -44,7 +44,7 @@ export const App = {
     } catch (error) {
       console.error('Fatal: Application initialization failed:', error);
       
-      // Try to show error to user
+      // try to show error to user
       tryCatch(
         () => {
           const display = document.getElementById('display');
@@ -64,12 +64,12 @@ export const App = {
   },
 
   /**
-   * Set up all event listeners
+   * set up all event listeners
    * @returns {{success: boolean, error?: string}}
    */
   setupEventListeners: function () {
     try {
-      // Listen for calculate event from keyboard
+      // listen for calculate event from keyboard
       document.addEventListener('calculator:calculate', () => {
         tryCatch(
           () => this.calculate(),
@@ -78,7 +78,7 @@ export const App = {
         );
       });
 
-      // Calculator buttons
+      // calculator buttons
       const calculatorButtons = document.getElementById('calculator-buttons');
       if (!calculatorButtons) {
         throw new Error('Calculator buttons element not found');
@@ -92,7 +92,7 @@ export const App = {
         );
       });
 
-      // History clear button
+      // history clear button
       const historyClearBtn = document.querySelector('#history-clear-btn');
       if (!historyClearBtn) {
         throw new Error('History clear button not found');
@@ -106,7 +106,7 @@ export const App = {
         );
       });
 
-      // Initialize keyboard support
+      // initialize keyboard support
       const keyboardResult = displayCalculator.initKeyboardSupport();
       if (!keyboardResult.success) {
         console.warn('Keyboard support initialization failed:', keyboardResult.error);
@@ -124,13 +124,15 @@ export const App = {
   },
 
   /**
-   * Handle calculator button clicks
-   * @param {MouseEvent} event - Click event
+   * handle calculator button clicks
+   * @param {MouseEvent} event - click event
    */
   handleButtonClick: function (event) {
     try {
       const button = event.target.closest('button');
-      if (!button) return;
+      if (!button) {
+        return { success: true };
+      }
 
       const action = button.dataset.action;
       const value = button.dataset.value;
@@ -138,24 +140,37 @@ export const App = {
       if (value) {
         const result = displayCalculator.appendToDisplay(value);
         if (!result.success) {
-          console.warn('Failed to append value:', result.error);
-          // Optionally provide user feedback here
+          console.warn('failed to append value:', result.error);
+          return result;
         }
       } else if (action === ACTIONS.CLEAR) {
-        displayCalculator.resetDisplay();
+        const result = displayCalculator.resetDisplay();
+        if (!result.success) {
+          console.warn('failed to reset:', result.error);
+          return result;
+        }
       } else if (action === ACTIONS.DELETE) {
-        displayCalculator.deleteLast();
+        const result = displayCalculator.deleteLast();
+        if (!result.success) {
+          console.warn('failed to reset', result.error);
+          return result;
+        }
       } else if (action === ACTIONS.CALCULATE) {
-        this.calculate();
+        return this.calculate();
       }
-
+      
+      return { success: true };
     } catch (error) {
-      console.error('Error handling button click:', error);
+      console.error('error handling button click:', error);
+      return {
+        success: false,
+        error: 'error handling button click'
+      };
     }
   },
 
   /**
-   * Calculate and display result
+   * calculate and display result
    * @returns {{success: boolean, result?: number, error?: string}}
    */
   calculate: function () {
@@ -236,13 +251,16 @@ export const App = {
    */
   showTemporaryError: function (message) {
     try {
-      console.error('Calculation error:', message);
-      
-      // Could add UI notification here in the future
-      // For example, a toast notification or status message
-      
+      console.error('calculation error:', message);
+      return {
+        success: true
+      };    
     } catch (error) {
-      console.error('Error showing temporary error:', error);
+      console.error('error showing temporary error:', error);
+      return {
+        success: false,
+        error: 'error showing temporary error'
+      };
     }
   },
 
@@ -278,26 +296,30 @@ export const App = {
   },
 
   /**
-   * Get application state for debugging
-   * @returns {Object} Current application state
+   * get application state for debugging
+   * @returns {Object} current application state
    */
   getState: function () {
     try {
       return {
-        display: displayCalculator.getValue(),
-        historyCount: calculatorHistory.getCount(),
-        isShowingMotd: displayCalculator.isShowingMotd()
+        success: true,
+        state: {
+          display: displayCalculator.getValue(),
+          historyCount: calculatorHistory.getCount(),
+          isShowingMotd: displayCalculator.isShowingMotd()
+        }
       };
     } catch (error) {
-      console.error('Error getting application state:', error);
+      console.error('error getting application state:', error);
       return {
-        error: 'Failed to get state'
+        success: false,
+        error: 'failed to get state'
       };
     }
   }
 };
 
-// Initialize application when DOM is ready
+// initialize application when DOM is ready
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     App.initialize();

@@ -9,8 +9,8 @@ import { ERROR_MESSAGES, VALIDATION } from './constants.js';
 
 /**
  * sleep utility with abort support
- * @param {number} ms - Milliseconds to sleep
- * @param {AbortSignal} abortSignal - Optional abort signal for cancellation
+ * @param {number} ms - milliseconds to sleep
+ * @param {AbortSignal} abortSignal - optional abort signal for cancellation
  * @returns {Promise<void>}
  */
 const sleep = (ms, abortSignal) => {
@@ -46,6 +46,8 @@ const validate = {
 
   /**
    * safely parse a number with validation
+   * @param {*} value - value to validate
+   * @returns {{success: boolean, value?: number, error?: string}}
    */
   safeParseNumber: function (value) {
     const num = parseFloat(value);
@@ -76,6 +78,11 @@ const validate = {
     };
   },
 
+  /**
+   * validates the parentheses in a expression
+   * @param {string} expression - expression to validate
+   * @returns {{valid: boolean, error?: string}}
+   */
   validateParentheses: function (expression) {
     let count = 0;
 
@@ -101,6 +108,11 @@ const validate = {
     return { valid: true };
   },
 
+  /**
+   * validates expression
+   * @param {string} expression - expression to validate
+   * @returns {{valid: boolean, error?: string}}
+   */
   validateExpression: function (expression) {
     if (!expression || expression.trim() === '') {
       return {
@@ -121,11 +133,25 @@ const validate = {
   }
 };
 
+/**
+ * safely executes a function with error handling
+ * @param {Function} fn - Function to exexcute
+ * @param {*} defaultValue - default value on error
+ * @param {string} errorMessage - error message
+ * @returns {*}
+ */
 const tryCatch = (fn, defaultValue, errorMessage = 'Operation failed') => {
   try {
     return fn();
   } catch (error) {
     console.error(`${errorMessage}:`, error);
+    const isDev = !window.location.hostname.includes('yourdomain.com') || 
+                  window.location.hostname === 'localhost';
+    
+    if (isDev) {
+      console.warn('error caught by tryCatch - throwing for visibility');
+      throw error;
+    }
     return defaultValue;
   }
 };

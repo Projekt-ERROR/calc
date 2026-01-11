@@ -53,18 +53,18 @@ const displayCalculator = {
    * @returns {string}
    */
   getValue: function () {
-    try {
-      if (!this.display) {
-        console.warn('display not initialized');
-        return '';
-      }
+    return tryCatch(
+      () => {
+        if (!this.display) {
+          console.warn('display not initialized');
+          return '';
+        }
 
-      return this.display.value || '';
-
-    } catch (error) {
-      console.error('error getting display value: ', error);
-      return '';
-    }
+        return this.display.value || '';
+      },
+      '',
+      'error getting display value'
+    );
   },
 
   /**
@@ -72,15 +72,15 @@ const displayCalculator = {
    * @returns {string} the current number string
    */
   getCurrentNumber: function () {
-    try {
-      const display = this.getValue();
-      const parts = display.split(/[+\-*/]/);
-      return parts[parts.length - 1] || '';
-
-    } catch (error) {
-      console.error('error getting current number: ', error);
-      return '';
-    }
+    return tryCatch(  
+      () => {
+        const display = this.getValue();
+        const parts = display.split(/[+\-*/]/);
+        return parts[parts.length - 1] || '';
+      },
+      '',
+      'error getting current number'
+    );
   },
 
   /**
@@ -261,16 +261,11 @@ const displayCalculator = {
    * @returns {boolean}
    */
   isShowingMotd: function () {
-    try {
-
-      return this.typingController !== null || this.getValue() === this.MOTD;
-
-    } catch (error) {
-
-      console.error('error checking MOTD status: ', error);
-      return false;
-
-    }
+    return tryCatch(
+      () => this.typingController !== null || this.getValue() === this.MOTD,
+      false,
+      'error checking MOTD status'
+    );
   },
 
   /**

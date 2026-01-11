@@ -6,13 +6,13 @@
  * error messages
  */
 const ERROR_MESSAGES = {
-  DIVISION_BY_ZERO: 'Cannot divide by zero',
-  INVALID_EXPRESSION: 'Invalid expression',
-  INVALID_NUMBER: 'Invalid number format',
-  CALCULATION_ERROR: 'Calculation error',
-  EMPTY_EXPRESSION: 'No expression to calculate',
-  MISSING_OPERAND: 'Missing operand',
-  MISMATCHED_PARENTHESES: 'Mismatched parentheses',
+  DIVISION_BY_ZERO: 'cannot divide by zero',
+  INVALID_EXPRESSION: 'invalid expression',
+  INVALID_NUMBER: 'invalid number format',
+  CALCULATION_ERROR: 'calculation error',
+  EMPTY_EXPRESSION: 'no expression to calculate',
+  MISSING_OPERAND: 'missing operand',
+  MISMATCHED_PARENTHESES: 'mismatched parentheses',
 };
 
 /**
