@@ -137,7 +137,7 @@ const displayCalculator = {
    * delete last character from display
    */
   deleteLast: function () {
-    if (this.isShowingMotd()) this.clearDisplay();
+    if (this.isShowingMotd() || this.getValue() === "Error" || this.getValue() === "undefined") this.clearDisplay();
     this.setValue(this.getValue().slice(0, -1));
   },
 
