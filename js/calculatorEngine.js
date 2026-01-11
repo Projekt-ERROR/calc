@@ -77,6 +77,9 @@ const calculatorEngine = {
         } else if (token === '*') {
           result = a * b;
         } else if (token === '/') {
+          if (b === 0) {
+            throw new Error('Division by zero')
+          }
           result = a / b;
         }
 
