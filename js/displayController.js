@@ -71,51 +71,51 @@ const displayCalculator = {
    * append input to display
    * @param {string} input
    */
-    appendToDisplay: function (input) {
-      const currentNumber = this.getCurrentNumber();
-      const display = this.getValue();
-      
-      // Check for MOTD
-      if (this.isShowingMotd()) this.clearDisplay();
+  appendToDisplay: function (input) {
+    const currentNumber = this.getCurrentNumber();
+    const display = this.getValue();
+    
+    // Check for MOTD
+    if (this.isShowingMotd()) this.clearDisplay();
 
-      // Special handling for decimal
-      if (input === '.') { 
-        if (currentNumber.includes('.')) {
-          return;
-        }
-        if (currentNumber === '') {
-          input = '0.';
+    // Special handling for decimal
+    if (input === '.') { 
+      if (currentNumber.includes('.')) {
+        return;
+      }
+      if (currentNumber === '') {
+        input = '0.';
+      }
+    }
+
+    // Special handling for operators
+    if (OPERATORS.includes(input)) {
+      
+      // Count consecutive operators at end
+      let consecutiveOps = 0;
+      for (let i = display.length - 1; i >= 0; i--) {
+        if (OPERATORS.includes(display[i])) {
+          consecutiveOps++;
+        } else {
+          break;
         }
       }
-
-      // Special handling for operators
-      if (OPERATORS.includes(input)) {
-        
-        // Count consecutive operators at end
-        let consecutiveOps = 0;
-        for (let i = display.length - 1; i >= 0; i--) {
-          if (OPERATORS.includes(display[i])) {
-            consecutiveOps++;
-          } else {
-            break;
-          }
-        }
-        
-        // empty display: only allow minus
-        if (display === '' && input !== '-') return;
-
-        // starting with minus: don't allow another minus (prevent --)
-        if (display === '-') return;
-
-        // 1 operator already: only allow minus (for negatives like 5+-3)
-        if (consecutiveOps === 1 && input !== '-') return;
-
-        // 2+ operators already: block everything
-        if (consecutiveOps >= 2) return;
-      }
       
-      this.setValue(this.getValue() + input);
-    },
+      // empty display: only allow minus
+      if (display === '' && input !== '-') return;
+
+      // starting with minus: don't allow another minus (prevent --)
+      if (display === '-') return;
+
+      // 1 operator already: only allow minus (for negatives like 5+-3)
+      if (consecutiveOps === 1 && input !== '-') return;
+
+      // 2+ operators already: block everything
+      if (consecutiveOps >= 2) return;
+    }
+    
+    this.setValue(this.getValue() + input);
+  },
 
   /**
    * reset display and show MOTD
@@ -230,6 +230,21 @@ const displayHistory = {
   historyList: document.getElementById('history-list'),
 
   /**
+   * initialize event delegation for history items
+   */
+  initialize: function() {
+    this.historyList.addEventListener('click', (event) => {
+      const historyItem = event.target.closest('.history-item');
+      
+      if (!historyItem) return;
+
+      const expression = historyItem.dataset.expression;
+
+      displayCalculator.setValue(expression);
+    })
+  },
+
+  /**
    * update the history display in UI
    */
   updateDisplay: function () {
@@ -259,16 +274,14 @@ const displayHistory = {
   addHistoryItem: function (entry) {
     const item = document.createElement('div');
     item.className = 'history-item';
+
+    item.dataset.expression = entry.expression;
+
     item.innerHTML = `
       <span class="history-expression">${entry.expression}</span>
       <span class="history-result">= ${entry.result}</span>
     `;
-    
-    // click to restore expression
-    item.onclick = () => {
-      displayCalculator.setValue(entry.expression);
-    };
-    
+        
     this.historyList.appendChild(item);
   },
 
