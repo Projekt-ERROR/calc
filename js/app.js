@@ -15,6 +15,7 @@ const App = {
     // initialize application
     displayCalculator.typingMessage(displayCalculator.MOTD);
     displayCalculator.initKeyboardSupport();
+    displayHistory.initialize();
     displayHistory.updateDisplay();
 
     // listen for calculate from keyboard
