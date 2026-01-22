@@ -25,6 +25,8 @@ const displayCalculator = {
   typingController: null,
   currentAnimationId: 0,
 
+  // result controller
+  isResult: false,
   /**
    * Initialize the display controller
    * @returns {{success: boolean, error?: string}}
@@ -86,8 +88,9 @@ const displayCalculator = {
   /**
    * set display value
    * @param {string} value
+   * @param {boolean} isResult - check if value set was from result
    */
-  setValue: function (value) {
+  setValue: function (value, isResult) {
     try {
       if (!this.display) {
         return {
@@ -107,6 +110,7 @@ const displayCalculator = {
       }
 
       this.display.value = stringValue;
+      this.isResult = isResult;
       return { success: true };
 
     } catch (error) {
@@ -153,10 +157,18 @@ const displayCalculator = {
         };
       }
 
-      // Check for MOTD
+      // check for MOTD
       if (this.isShowingMotd()) {
         this.clearDisplay();
       }
+
+      // special handling if result
+      if (this.isResult === true) {
+        if (!OPERATORS.includes(input)) {
+          this.clearDisplay();
+        }
+      }
+
 
       const currentNumber = this.getCurrentNumber();
       const display = this.getValue();
@@ -182,7 +194,7 @@ const displayCalculator = {
         }
       }
 
-      // Special handling for operators
+      // special handling for operators
       if (OPERATORS.includes(input)) {
         
         // Count consecutive operators at end
