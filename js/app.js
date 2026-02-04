@@ -212,7 +212,7 @@ export const App = {
 
       // Display successful result
       const result = calculationResult.result;
-      displayCalculator.setValue(result);
+      displayCalculator.setValue(result, true);
 
       // Add to history
       const historyResult = calculatorHistory.pushToHistory({
